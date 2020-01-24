@@ -22,11 +22,12 @@ public interface UserEntityMapper {
             @Mapping(target = "status", ignore = true),
             @Mapping(target = "userId", ignore = true),
             @Mapping(target = "workExperience", ignore = true),
-            @Mapping(target = "userAnswers", ignore = true),
             @Mapping(target = "storeAddress", ignore = true),
             @Mapping(target = "registrationStage", ignore = true),
             @Mapping(target = "firstName", ignore = true),
-            @Mapping(target = "lastName", ignore = true)
+            @Mapping(target = "lastName", ignore = true),
+            @Mapping(target = "sex", ignore = true),
+            @Mapping(target = "userQuestion", ignore = true)
     })
     UserEntity mapToUserEntity(User telegramUser);
 }

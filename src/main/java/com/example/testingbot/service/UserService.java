@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import static com.example.testingbot.constant.Status.*;
+import static com.example.testingbot.domain.UserStatus.*;
+import static com.example.testingbot.constant.UserInfo.*;
 
 @Service
 public class UserService {
@@ -41,6 +42,20 @@ public class UserService {
         user.setStatus(REGISTRATION);
         user.setRegistrationStage(1);
         userRepository.save(user);
+    }
+
+    public String userInfo(UserEntity user) {
+        return INFO.getUserInfo() + NEXT_LINE.getUserInfo() +
+                FIRST_NAME.getUserInfo() + user.getFirstName() + NEXT_LINE.getUserInfo() +
+                LAST_NAME.getUserInfo() + user.getLastName() + NEXT_LINE.getUserInfo() +
+                PATRONYMIC.getUserInfo() + user.getPatronymic() + NEXT_LINE.getUserInfo() +
+                SEX.getUserInfo() + user.getSex() + NEXT_LINE.getUserInfo() +
+                MARITAL_STATUS.getUserInfo() + user.getMaritalStatus() + NEXT_LINE.getUserInfo() +
+                PHONE.getUserInfo() + user.getPhone() + NEXT_LINE.getUserInfo() +
+                CITY.getUserInfo() + user.getCity() + NEXT_LINE.getUserInfo() +
+                ADDRESS_STORE.getUserInfo() + user.getStoreAddress() + NEXT_LINE.getUserInfo() +
+                POSITION.getUserInfo() + user.getPosition() + NEXT_LINE.getUserInfo() +
+                EXPERIENCE.getUserInfo() + user.getWorkExperience();
     }
 
     public void updateProfile(UserEntity user, String userData) {

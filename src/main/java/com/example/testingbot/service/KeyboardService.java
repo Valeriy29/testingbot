@@ -33,6 +33,14 @@ public class KeyboardService {
         return getKeyboard(message, text, ParamKeyboard.VERTICAL, MALE.getUserMessage(), FEMALE.getUserMessage());
     }
 
+    public SendMessage getMaritalMenu(Message message, String text) {
+        return getKeyboard(message, text, ParamKeyboard.VERTICAL, MARRIED.getUserMessage(), SINGLE.getUserMessage());
+    }
+
+    public SendMessage getSaveInfoMenu(Message message, String text) {
+        return getKeyboard(message, text, ParamKeyboard.VERTICAL, SAVE.getUserMessage(), CHANGE.getUserMessage());
+    }
+
     private SendMessage getKeyboard(Message message, String text, ParamKeyboard param, String... buttonText) {
         return sendMsgKeyboard(message, text, param, buttonText);
     }

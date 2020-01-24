@@ -1,7 +1,7 @@
 package com.example.testingbot.controller;
 
 import com.example.testingbot.constant.BotMessage;
-import com.example.testingbot.constant.Status;
+import com.example.testingbot.domain.UserStatus;
 import com.example.testingbot.constant.UserMessage;
 import com.example.testingbot.domain.UserEntity;
 import com.example.testingbot.service.KeyboardService;
@@ -63,27 +63,46 @@ public class BotController extends TelegramLongPollingBot {
 
             if (userService.userExists(userEntity)) {
 
-                if (userEntity.getStatus().equals(Status.REGISTRATION) || userEntity.getStatus().equals(Status.PROFILE)) {
+                if (userEntity.getStatus().equals(UserStatus.REGISTRATION) || userEntity.getStatus().equals(UserStatus.PROFILE)) {
 
-                    if (message.getText().equals(UserMessage.PROFILE.getUserMessage()) && userEntity.getStatus().equals(Status.REGISTRATION)) {
-                        userEntity.setStatus(Status.PROFILE);
+                    if (message.getText().equals(UserMessage.PROFILE.getUserMessage()) && userEntity.getStatus().equals(UserStatus.REGISTRATION)) {
+                        userEntity.setStatus(UserStatus.PROFILE);
                         userEntity = userService.updateUser(userEntity);
                     }
 
-                    if (!message.getText().equals(UserMessage.PROFILE.getUserMessage()) && userEntity.getStatus().equals(Status.PROFILE)) {
+                    if (!message.getText().equals(UserMessage.PROFILE.getUserMessage()) && userEntity.getStatus().equals(UserStatus.PROFILE)) {
                         userService.updateProfile(userEntity, message.getText());
                     }
 
-                    //TODO add keyboard choice marital status, and set status when registration finished
-                    if (userEntity.getStatus().equals(Status.PROFILE)) {
-                        if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_SEX_STAGE.getBotMessage())) {
-                            executeMessage(keyboardService.getProfileSexMenu(message, userService.getProfileQuestion(userEntity)));
+                    if (userEntity.getStatus().equals(UserStatus.PROFILE)) {
+                        if (BotMessage.getConstQuestions().contains(String.valueOf(userEntity.getRegistrationStage()))) {
+                            if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_SEX_STAGE.getBotMessage())) {
+                                executeMessage(keyboardService.getProfileSexMenu(message, userService.getProfileQuestion(userEntity)));
+                            }
+                            if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_MARITAL_STAGE.getBotMessage())) {
+                                executeMessage(keyboardService.getMaritalMenu(message, userService.getProfileQuestion(userEntity)));
+                            }
                         } else {
                             if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_ALL_STAGES.getBotMessage())) {
+
                                 executeMessage(keyboardService.sendMsg(message, BotMessage.PROFILE_DONE.getBotMessage()));
+                                executeMessage(keyboardService.sendMsg(message, userService.userInfo(userEntity)));
+                                executeMessage(keyboardService.getSaveInfoMenu(message, BotMessage.CHANGE_PROFILE.getBotMessage()));
                             } else {
                                 executeMessage(keyboardService.sendMsg(message, userService.getProfileQuestion(userEntity)));
                             }
+                        }
+
+                        if (message.getText().equals(UserMessage.SAVE.getUserMessage())) {
+                            userEntity.setStatus(UserStatus.ACTIVE);
+                            userService.updateUser(userEntity);
+                            executeMessage(keyboardService.getSaveInfoMenu(message, BotMessage.PROFILE_SAVED.getBotMessage()));
+                        }
+                        if (message.getText().equals(UserMessage.CHANGE.getUserMessage())) {
+                            userEntity.setStatus(UserStatus.REGISTRATION);
+                            userEntity.setRegistrationStage(1);
+                            userService.updateUser(userEntity);
+                            executeMessage(keyboardService.getProfileMenu(message, BotMessage.PROFILE.getBotMessage()));
                         }
                     }
                 }

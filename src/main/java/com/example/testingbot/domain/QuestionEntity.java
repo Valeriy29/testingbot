@@ -1,13 +1,9 @@
 package com.example.testingbot.domain;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "questions")
@@ -23,9 +19,26 @@ public class QuestionEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jpaSequence")
     private Long questionId;
 
+    @Column(name = "innerId")
+    private Integer innerId;
+
+    @Column(name = "time_question")
+    private Date timeQuestion;
+
+    @Column(name = "time_answer")
+    private Date timeAnswer;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private QuestionStatus status;
+
     @Column(name = "image")
     private String image;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL)
-    private Set<AnswerEntity> answers;
+    @Column(name = "answer_text")
+    private String answerText;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity userEntity;
 }

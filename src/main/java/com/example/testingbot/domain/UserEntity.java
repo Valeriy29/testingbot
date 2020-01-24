@@ -1,6 +1,5 @@
 package com.example.testingbot.domain;
 
-import com.example.testingbot.constant.Status;
 import lombok.*;
 
 import javax.persistence.*;
@@ -70,8 +69,8 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private UserStatus status;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "userEntity", cascade = CascadeType.ALL)
-    private Set<AnswerEntity> userAnswers;
+    private Set<QuestionEntity> userQuestion;
 }

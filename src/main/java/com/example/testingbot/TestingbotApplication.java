@@ -1,6 +1,8 @@
 package com.example.testingbot;
 
 import com.example.testingbot.controller.BotController;
+import com.example.testingbot.migration.ImageMigration;
+import com.example.testingbot.repository.ImageRepository;
 import com.example.testingbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,6 +21,9 @@ public class TestingbotApplication implements CommandLineRunner {
 	}
 
 	private final BotController botController;
+
+	@Autowired
+	public ImageMigration imageMigration;
 
 	@Autowired
 	public TestingbotApplication(BotController botController) {
@@ -41,5 +46,6 @@ public class TestingbotApplication implements CommandLineRunner {
 		} catch (TelegramApiRequestException e) {
 			e.printStackTrace();
 		}
+		//imageMigration.migration();
 	}
 }
