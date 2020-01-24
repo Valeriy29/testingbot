@@ -2,5 +2,5 @@ package com.example.testingbot.util;
 
 public enum ParamKeyboard {
 
-    VERTICAL, HORIZONTAL
+    VERTICAL, HORIZONTAL, VERTICAL_INLINE
 }

@@ -41,6 +41,9 @@ public class UserEntity {
     @Column(name = "patronymic")
     private String patronymic;
 
+    @Column(name = "sex")
+    private String sex;
+
     @Column(name = "marital_status")
     private String maritalStatus;
 
@@ -57,10 +60,13 @@ public class UserEntity {
     private String position;
 
     @Column(name = "work_experience")
-    private Integer workExperience;
+    private String workExperience;
 
     @Column(name = "answers_count")
     private Integer answersCount;
+
+    @Column(name = "registration_stage")
+    private Integer registrationStage;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

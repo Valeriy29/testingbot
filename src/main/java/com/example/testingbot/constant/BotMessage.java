@@ -3,7 +3,22 @@ package com.example.testingbot.constant;
 public enum BotMessage {
 
     GREETING("Приветствуем Вас в нашем Боте для тестирования. Для начала зарегистрируйтесь:"),
-    REGISTRATION_COMPLETE("Вы зарегистрированы в системе! Введите Ваши данные:");
+    REGISTRATION_COMPLETE("Вы зарегистрированы в системе!"),
+    PROFILE("Заполните анкету:"),
+    PROFILE_NAME("Введите Ваше имя"),
+    PROFILE_LAST_NAME("Введите Вашу фамилию"),
+    PROFILE_PATRONYMIC("Введите Ваше отчество"),
+    PROFILE_SEX("Укажите Ваш пол"),
+    PROFILE_MARITAL("Укажите Ваше семейное положение"),
+    PROFILE_PHONE("Укажите Ваш номер телефона"),
+    PROFILE_CITY("Укажите Ваш город"),
+    PROFILE_ADDRESS("Укажите адрес точки"),
+    PROFILE_POSITION("Укажите Вашу должность"),
+    PROFILE_EXPERIENCE("Укажите Ваш стаж работы в компании"),
+    PROFILE_ALL_STAGES("11"),
+    PROFILE_SEX_STAGE("4"),
+    PROFILE_DONE("Ваша анкета заполнена");
+
 
     private String botMessage;
 

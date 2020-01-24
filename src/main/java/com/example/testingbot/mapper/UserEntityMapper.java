@@ -24,6 +24,9 @@ public interface UserEntityMapper {
             @Mapping(target = "workExperience", ignore = true),
             @Mapping(target = "userAnswers", ignore = true),
             @Mapping(target = "storeAddress", ignore = true),
+            @Mapping(target = "registrationStage", ignore = true),
+            @Mapping(target = "firstName", ignore = true),
+            @Mapping(target = "lastName", ignore = true)
     })
     UserEntity mapToUserEntity(User telegramUser);
 }

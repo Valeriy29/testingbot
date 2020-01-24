@@ -1,6 +1,8 @@
 package com.example.testingbot.controller;
 
+import com.example.testingbot.constant.BotMessage;
 import com.example.testingbot.constant.Status;
+import com.example.testingbot.constant.UserMessage;
 import com.example.testingbot.domain.UserEntity;
 import com.example.testingbot.service.KeyboardService;
 import com.example.testingbot.service.UserService;
@@ -13,10 +15,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import static com.example.testingbot.constant.Admin.*;
-import static com.example.testingbot.constant.BotMessage.*;
-import static com.example.testingbot.constant.Status.*;
-import static com.example.testingbot.constant.UserMessage.*;
-import static com.example.testingbot.constant.UserMessage.REGISTRATION;
 
 @Controller
 public class BotController extends TelegramLongPollingBot {
@@ -34,27 +32,60 @@ public class BotController extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
 
-        UserEntity userEntity = userService.findUserByTelegramId(message.getFrom().getId());
+        Integer userTelegramId;
+        if (update.hasCallbackQuery()) {
+            userTelegramId = update.getCallbackQuery().getFrom().getId();
+        } else {
+            userTelegramId = message.getFrom().getId();
+        }
+
+        UserEntity userEntity = userService.findUserByTelegramId(userTelegramId);
+
+        if (update.hasCallbackQuery()) {
+            executeMessage(keyboardService.sendInlineMsg(update));
+        }
 
         if (message.hasText()) {
 
             if (!userService.userExists(userEntity)) {
 
-                if (message.getText().equals(START.getUserMessage())) {
-                    executeMessage(keyboardService.getRegistrationMenu(message, GREETING.getBotMessage()));
+                if (message.getText().equals(UserMessage.START.getUserMessage())) {
+                    executeMessage(keyboardService.getRegistrationMenu(message, BotMessage.GREETING.getBotMessage()));
                 }
 
-                if (message.getText().equals(REGISTRATION.getUserMessage())) {
+                if (message.getText().equals(UserMessage.REGISTRATION.getUserMessage())) {
                     userService.registration(update);
-                    executeMessage(keyboardService.sendMsg(message, REGISTRATION_COMPLETE.getBotMessage()));
+                    executeMessage(keyboardService.sendMsg(message, BotMessage.REGISTRATION_COMPLETE.getBotMessage()));
+                    executeMessage(keyboardService.getProfileMenu(message, BotMessage.PROFILE.getBotMessage()));
                 }
 
             }
 
             if (userService.userExists(userEntity)) {
 
-                if (userEntity.getStatus().equals(Status.REGISTRATION)) {
+                if (userEntity.getStatus().equals(Status.REGISTRATION) || userEntity.getStatus().equals(Status.PROFILE)) {
 
+                    if (message.getText().equals(UserMessage.PROFILE.getUserMessage()) && userEntity.getStatus().equals(Status.REGISTRATION)) {
+                        userEntity.setStatus(Status.PROFILE);
+                        userEntity = userService.updateUser(userEntity);
+                    }
+
+                    if (!message.getText().equals(UserMessage.PROFILE.getUserMessage()) && userEntity.getStatus().equals(Status.PROFILE)) {
+                        userService.updateProfile(userEntity, message.getText());
+                    }
+
+                    //TODO add keyboard choice marital status, and set status when registration finished
+                    if (userEntity.getStatus().equals(Status.PROFILE)) {
+                        if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_SEX_STAGE.getBotMessage())) {
+                            executeMessage(keyboardService.getProfileSexMenu(message, userService.getProfileQuestion(userEntity)));
+                        } else {
+                            if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_ALL_STAGES.getBotMessage())) {
+                                executeMessage(keyboardService.sendMsg(message, BotMessage.PROFILE_DONE.getBotMessage()));
+                            } else {
+                                executeMessage(keyboardService.sendMsg(message, userService.getProfileQuestion(userEntity)));
+                            }
+                        }
+                    }
                 }
 
             }

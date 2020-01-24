@@ -2,5 +2,5 @@ package com.example.testingbot.constant;
 
 public enum Status {
 
-    REGISTRATION,
+    REGISTRATION, PROFILE
 }

@@ -1,12 +1,16 @@
 package com.example.testingbot.service;
 
+import com.example.testingbot.constant.BotMessage;
 import com.example.testingbot.util.KeyboardFactory;
 import com.example.testingbot.util.ParamKeyboard;
 import com.vdurmont.emoji.EmojiParser;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
+
+import java.util.function.Consumer;
 
 import static com.example.testingbot.constant.UserMessage.*;
 
@@ -21,6 +25,14 @@ public class KeyboardService {
         return getKeyboard(message, text, ParamKeyboard.VERTICAL, REGISTRATION.getUserMessage());
     }
 
+    public SendMessage getProfileMenu(Message message, String text) {
+        return getKeyboard(message, text, ParamKeyboard.VERTICAL, PROFILE.getUserMessage());
+    }
+
+    public SendMessage getProfileSexMenu(Message message, String text) {
+        return getKeyboard(message, text, ParamKeyboard.VERTICAL, MALE.getUserMessage(), FEMALE.getUserMessage());
+    }
+
     private SendMessage getKeyboard(Message message, String text, ParamKeyboard param, String... buttonText) {
         return sendMsgKeyboard(message, text, param, buttonText);
     }
@@ -33,12 +45,21 @@ public class KeyboardService {
         return sendMessage;
     }
 
+    public SendMessage sendInlineMsg(Update update) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(String.valueOf(update.getCallbackQuery().getFrom().getId()));
+        sendMessage.setText(update.getCallbackQuery().getData());
+        return sendMessage;
+    }
+
     private SendMessage sendMsgKeyboard(Message message, String text, ParamKeyboard param, String... buttonText) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());
         sendMessage.setText(text);
-        KeyboardFactory.buildKeyboard(param, sendMessage, buttonText);
+        sendMessage.setReplyMarkup(KeyboardFactory.buildKeyboard(param, sendMessage, buttonText));
         return sendMessage;
     }
+
 }
