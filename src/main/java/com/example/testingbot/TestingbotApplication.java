@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
@@ -33,6 +34,11 @@ public class TestingbotApplication implements CommandLineRunner {
 	@Bean
 	TelegramBotsApi getTelegramBotsApi() {
 		return new TelegramBotsApi();
+	}
+
+	@Bean
+	RestTemplate getRestTemplate() {
+		return new RestTemplate();
 	}
 
 	public static void main(String[] args) {

@@ -23,8 +23,8 @@ public enum BotMessage {
     PROFILE_MARITAL_STAGE("5"),
     PROFILE_DONE("Ваша анкета заполнена"),
     CHANGE_PROFILE("Изменить данные?"),
-    PROFILE_SAVED("Ваша анкета сохранена");
-
+    PROFILE_SAVED("Ваша анкета сохранена"),
+    QUESTION_TEXT("What do you see in the picture?");
 
     private String botMessage;
 

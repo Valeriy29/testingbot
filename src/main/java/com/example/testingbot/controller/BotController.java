@@ -5,6 +5,7 @@ import com.example.testingbot.domain.UserStatus;
 import com.example.testingbot.constant.UserMessage;
 import com.example.testingbot.domain.UserEntity;
 import com.example.testingbot.service.KeyboardService;
+import com.example.testingbot.service.QuestionService;
 import com.example.testingbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,13 @@ public class BotController extends TelegramLongPollingBot {
 
     private final KeyboardService keyboardService;
     private final UserService userService;
+    private final QuestionService questionService;
 
     @Autowired
-    public BotController(KeyboardService keyboardService, UserService userService) {
+    public BotController(KeyboardService keyboardService, UserService userService, QuestionService questionService) {
         this.keyboardService = keyboardService;
         this.userService = userService;
+        this.questionService = questionService;
     }
 
     @Override
@@ -95,6 +98,9 @@ public class BotController extends TelegramLongPollingBot {
 
                         if (message.getText().equals(UserMessage.SAVE.getUserMessage())) {
                             userEntity.setStatus(UserStatus.ACTIVE);
+
+                            questionService.crateQuestions(userEntity.getTelegramId());
+
                             userService.updateUser(userEntity);
                             executeMessage(keyboardService.getSaveInfoMenu(message, BotMessage.PROFILE_SAVED.getBotMessage()));
                         }
@@ -105,6 +111,10 @@ public class BotController extends TelegramLongPollingBot {
                             executeMessage(keyboardService.getProfileMenu(message, BotMessage.PROFILE.getBotMessage()));
                         }
                     }
+                }
+
+                if (userEntity.getStatus().equals(UserStatus.ACTIVE)) {
+
                 }
 
             }

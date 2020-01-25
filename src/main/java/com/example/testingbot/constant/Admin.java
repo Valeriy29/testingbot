@@ -3,7 +3,8 @@ package com.example.testingbot.constant;
 public enum Admin {
 
     TOKEN("997367876:AAGFZVw0c81zUQIOrXeKhuUz0MDt6f8roJU"),
-    BOT_NAME("company_testing_bot");
+    BOT_NAME("company_testing_bot"),
+    BASIC_URL("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s");
 
     private String constant;
 

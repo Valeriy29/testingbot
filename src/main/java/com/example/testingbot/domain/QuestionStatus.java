@@ -2,5 +2,5 @@ package com.example.testingbot.domain;
 
 public enum QuestionStatus {
 
-    ACTIVE, PASSIVE
+    ACTIVE, PASSIVE, IN_PROGRESS
 }
