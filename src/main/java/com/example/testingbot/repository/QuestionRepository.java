@@ -14,11 +14,11 @@ public interface QuestionRepository extends CrudRepository<QuestionEntity, Long>
     @Query(value = "SELECT * FROM questions WHERE user_id = ?1", nativeQuery = true)
     List<QuestionEntity> findAllByUserId(Long userId);
 
-    @Query(value = "SELECT * FROM questions WHERE  user_id = ?1 AND status = ?2", nativeQuery = true)
-    QuestionEntity findByUserIdAndStatus(Long userId, QuestionStatus questionStatus);
+    @Query(value = "SELECT * FROM questions WHERE user_id = ?1 AND status = ?2", nativeQuery = true)
+    List<QuestionEntity> searchAllByUserIdAndStatus(Long userId, String questionStatus);
 
-    @Query(value = "SELECT * FROM questions WHERE  user_id = ?1 AND status = ?2", nativeQuery = true)
-    List<QuestionEntity> findAllByUserIdAndStatus(Long userId, QuestionStatus questionStatus);
+    @Query(value = "SELECT * FROM questions WHERE allow_reply = true", nativeQuery = true)
+    List<QuestionEntity> searchAllowedQuestion(Long userId);
 
     QuestionEntity findByInnerId(Integer innerId);
 

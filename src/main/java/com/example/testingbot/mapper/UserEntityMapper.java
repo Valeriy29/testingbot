@@ -27,7 +27,7 @@ public interface UserEntityMapper {
             @Mapping(target = "firstName", ignore = true),
             @Mapping(target = "lastName", ignore = true),
             @Mapping(target = "sex", ignore = true),
-            @Mapping(target = "userQuestion", ignore = true)
+            @Mapping(target = "userQuestion", ignore = true),
     })
     UserEntity mapToUserEntity(User telegramUser);
 }

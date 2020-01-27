@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "questions")
@@ -38,7 +39,13 @@ public class QuestionEntity {
     @Column(name = "answer_text")
     private String answerText;
 
+    @Column(name = "is_ready")
+    private boolean ready;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity userEntity;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "questionEntity", cascade = CascadeType.ALL)
+    private Set<AnswerEntity> answers;
 }

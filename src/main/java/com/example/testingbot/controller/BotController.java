@@ -102,7 +102,7 @@ public class BotController extends TelegramLongPollingBot {
                             questionService.crateQuestions(userEntity.getTelegramId());
 
                             userService.updateUser(userEntity);
-                            executeMessage(keyboardService.getSaveInfoMenu(message, BotMessage.PROFILE_SAVED.getBotMessage()));
+                            executeMessage(keyboardService.getUserInfoMenu(message, BotMessage.PROFILE_SAVED.getBotMessage()));
                         }
                         if (message.getText().equals(UserMessage.CHANGE.getUserMessage())) {
                             userEntity.setStatus(UserStatus.REGISTRATION);
@@ -115,10 +115,26 @@ public class BotController extends TelegramLongPollingBot {
 
                 if (userEntity.getStatus().equals(UserStatus.ACTIVE)) {
 
+                    if (message.getText().equals(UserMessage.USER_INFO.getUserMessage())) {
+                        executeMessage(keyboardService.sendMsg(message, userService.userInfo(userEntity)));
+                    }
+
+                    if (message.getText().equals(UserMessage.TEST.getUserMessage())) {
+                        if (questionService.questIsReady(userEntity)) {
+                            questionService.disableReady(userEntity);
+                            questionService.sendImageWithText(userEntity);
+                        } else {
+                            executeMessage(keyboardService.sendMsg(message, BotMessage.NO_QUESTION.getBotMessage()));
+                        }
+                    }
+
+                    if (!UserMessage.getActiveMessage().contains(message.getText()) && questionService.answeringIsRun(userEntity)) {
+                        questionService.answer(userEntity, message.getText());
+                        executeMessage(keyboardService.sendMsg(message, BotMessage.QUESTION_SEND.getBotMessage()));
+                    }
+
                 }
-
             }
-
         }
     }
 

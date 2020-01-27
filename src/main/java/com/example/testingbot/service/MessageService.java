@@ -1,8 +1,8 @@
 package com.example.testingbot.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,13 @@ import static com.example.testingbot.constant.Admin.BASIC_URL;
 import static com.example.testingbot.constant.Admin.TOKEN;
 
 @Service
+@Slf4j
 public class MessageService {
-
-    Logger logger = LoggerFactory.getLogger(MessageService.class);
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public MessageService(RestTemplate restTemplate) {
+    public MessageService(@Lazy RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -29,9 +28,9 @@ public class MessageService {
         String url = String.format(BASIC_URL.getConstant(), TOKEN.getConstant(), telegramId, text);
         try {
             restTemplate.exchange(url, HttpMethod.POST, HttpEntity.EMPTY, String.class).getBody();
-            logger.info("Message sent {}", text);
+            log.info("Message sent {}", text);
         } catch (HttpClientErrorException | ResourceAccessException e) {
-            logger.info("Error. Message not sent {}", text);
+            log.info("Error. Message not sent {}", text);
         }
 
         try {

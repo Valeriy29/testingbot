@@ -24,7 +24,13 @@ public enum BotMessage {
     PROFILE_DONE("Ваша анкета заполнена"),
     CHANGE_PROFILE("Изменить данные?"),
     PROFILE_SAVED("Ваша анкета сохранена"),
-    QUESTION_TEXT("What do you see in the picture?");
+    READY("Поступил новый вопрос, Вы готовы? У вас будет 2 минуты на ответ"),
+    NO_QUESTION("Вопрос еще не готов, ожидайте"),
+    QUESTION_TEXT("Что Вы видете на изображении?"),
+    QUESTION_FAIL("Время вышло, ваши ответы: "),
+    QUESTION_SUCCESS("Встретимся в "),
+    QUESTION_SEND("Ответ отправлен"),
+    QUESTION_END("Спасибо за участие! Результаты сообщим позже");
 
     private String botMessage;
 

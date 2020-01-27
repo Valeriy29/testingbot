@@ -1,5 +1,8 @@
 package com.example.testingbot.constant;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum UserMessage {
 
     START("/start"),
@@ -10,7 +13,9 @@ public enum UserMessage {
     MARRIED("Замужем, женат"),
     SINGLE("Не замужем, не женат"),
     CHANGE("Изменить информацию"),
-    SAVE("Сохранить информацию");
+    SAVE("Сохранить информацию"),
+    USER_INFO("Ваша информация"),
+    TEST("Ответить на вопрос");
 
 
     private String userMessage;
@@ -21,5 +26,9 @@ public enum UserMessage {
 
     public String getUserMessage() {
         return userMessage;
+    }
+
+    public static List<String> getActiveMessage() {
+        return Arrays.asList(USER_INFO.userMessage, TEST.userMessage, SAVE.userMessage, CHANGE.userMessage);
     }
 }
