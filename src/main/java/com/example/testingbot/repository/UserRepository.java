@@ -12,6 +12,9 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
     UserEntity findUserEntityByTelegramId(Integer telegramId);
 
+    @Query(value = "SELECT * FROM users", nativeQuery = true)
+    List<UserEntity> findAllUsers();
+
     @Query(value = "SELECT user_id FROM users", nativeQuery = true)
     List<Long> findAllUsersId();
 

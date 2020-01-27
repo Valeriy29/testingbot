@@ -24,8 +24,8 @@ public class MessageService {
         this.restTemplate = restTemplate;
     }
 
-    public void sendMessageToUser(Integer telegramId, String text) {
-        String url = String.format(BASIC_URL.getConstant(), TOKEN.getConstant(), telegramId, text);
+    public void sendMessageToUser(Integer telegramId, String text, String basicUrl) {
+        String url = String.format(basicUrl, TOKEN.getConstant(), telegramId, text);
         try {
             restTemplate.exchange(url, HttpMethod.POST, HttpEntity.EMPTY, String.class).getBody();
             log.info("Message sent {}", text);
@@ -39,4 +39,5 @@ public class MessageService {
             e.printStackTrace();
         }
     }
+
 }

@@ -26,11 +26,12 @@ public enum BotMessage {
     PROFILE_SAVED("Ваша анкета сохранена"),
     READY("Поступил новый вопрос, Вы готовы? У вас будет 2 минуты на ответ"),
     NO_QUESTION("Вопрос еще не готов, ожидайте"),
-    QUESTION_TEXT("Что Вы видете на изображении?"),
+    QUESTION_TEXT("Что Вы видите на изображении?"),
     QUESTION_FAIL("Время вышло, ваши ответы: "),
     QUESTION_SUCCESS("Встретимся в "),
     QUESTION_SEND("Ответ отправлен"),
-    QUESTION_END("Спасибо за участие! Результаты сообщим позже");
+    QUESTION_END("Спасибо за участие! Результаты сообщим позже"),
+    ADMIN_MENU("Кабинет администратора");
 
     private String botMessage;
 

@@ -1,5 +1,6 @@
 package com.example.testingbot.service;
 
+import com.example.testingbot.constant.Admin;
 import com.example.testingbot.constant.BotMessage;
 import com.example.testingbot.domain.*;
 import com.example.testingbot.repository.AnswerRepository;
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static com.example.testingbot.constant.Admin.*;
 import static com.example.testingbot.domain.QuestionStatus.*;
 
 @Service
@@ -62,7 +64,7 @@ public class QuestionService {
                             && getTime(newDate, Calendar.MINUTE) == getTime(quest.getTimeQuestion(), Calendar.MINUTE)
                             && (quest.getInnerId() == 0 || questionList.get(i - 1).getStatus().equals(PASSIVE))) {
                         Integer telegramId = userRepository.findTelegramIdById(id);
-                        messageService.sendMessageToUser(telegramId, BotMessage.READY.getBotMessage());
+                        messageService.sendMessageToUser(telegramId, BotMessage.READY.getBotMessage(), BASIC_URL.getConstant());
                         quest.setStatus(IN_PROGRESS);
                         quest.setReady(true);
                         questionRepository.save(quest);
@@ -77,8 +79,8 @@ public class QuestionService {
         List<QuestionEntity> questionsList = questionRepository.searchAllByUserIdAndStatus(user.getUserId(), IN_PROGRESS.name());
         if (questionsList.size() > 0) {
             QuestionEntity question = questionsList.get(0);
-            messageService.sendMessageToUser(user.getTelegramId(), question.getImage());
-            messageService.sendMessageToUser(user.getTelegramId(), BotMessage.QUESTION_TEXT.getBotMessage());
+            messageService.sendMessageToUser(user.getTelegramId(), question.getImage(), BASIC_URL_PHOTO.getConstant());
+            messageService.sendMessageToUser(user.getTelegramId(), BotMessage.QUESTION_TEXT.getBotMessage(), BASIC_URL.getConstant());
             question.setStatus(RUN);
             questionRepository.save(question);
             new AnswerTimer(user, questionRepository, userRepository, answerRepository, messageService).start();
@@ -112,21 +114,6 @@ public class QuestionService {
         answer.setText(text);
         answerRepository.save(answer);
 
-//        if (questionsList.size() > 0) {
-//            QuestionEntity question = questionsList.get(0);
-//            question.setAnswerText(text);
-//            question.setStatus(PASSIVE);
-//            question.setTimeAnswer(new Date());
-//            questionRepository.save(question);
-//            QuestionEntity nextQuestion = questionRepository.findByInnerId(question.getInnerId() + 1);
-//            if (nextQuestion != null) {
-//                nextQuestion.setTimeQuestion(dateShift(question.getTimeAnswer(), nextQuestion.getTimeQuestion()));
-//                questionRepository.save(nextQuestion);
-//            } else {
-//                user.setStatus(UserStatus.DONE);
-//                userRepository.save(user);
-//            }
-//        }
     }
 
     public void crateQuestions(Integer telegramId) {
@@ -288,44 +275,15 @@ public class QuestionService {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
                 String date = simpleDateFormat.format(nextQuestion.getTimeQuestion());
 
-                messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage() + getAnswersByQuestion(question.getQuestionId()));
-                messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_SUCCESS.getBotMessage() + date);
+                messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage() + getAnswersByQuestion(question.getQuestionId()), BASIC_URL.getConstant());
+                messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_SUCCESS.getBotMessage() + date, BASIC_URL.getConstant());
             } else {
                 user.setStatus(UserStatus.DONE);
                 userRepository.save(user);
-                messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage() + getAnswersByQuestion(question.getQuestionId()));
-                messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_END.getBotMessage());
+                messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage() + getAnswersByQuestion(question.getQuestionId()), BASIC_URL.getConstant());
+                messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_END.getBotMessage(), BASIC_URL.getConstant());
             }
 
-
-//            List<QuestionEntity> questionsList = questionRepository.searchAllByUserIdAndStatus(user.getUserId(), IN_PROGRESS.name());
-//            if (questionsList.size() > 0) {
-//                QuestionEntity question = questionsList.get(0);
-//                question.setStatus(PASSIVE);
-//                question.setAnswerText("");
-//                question.setTimeAnswer(new Date());
-//                question.setAllowReply(false);
-//                questionRepository.save(question);
-//
-//                Integer telegramId = user.getTelegramId();
-//
-//                if (!question.getInnerId().equals(COUNT_OF_IMAGE)) {
-//                    List<QuestionEntity> passiveQuestions = questionRepository.searchAllByUserIdAndStatus(user.getUserId(), PASSIVE.name());
-//                    List<QuestionEntity> activeQuestions = questionRepository.searchAllByUserIdAndStatus(user.getUserId(), ACTIVE.name());
-//                    passiveQuestions.sort(Comparator.comparing(QuestionEntity::getInnerId));
-//                    activeQuestions.sort(Comparator.comparing(QuestionEntity::getInnerId));
-//                    QuestionEntity nowQuestion = passiveQuestions.get(passiveQuestions.size() - 1);
-//                    QuestionEntity nextQuestion = activeQuestions.get(0);
-//                    nextQuestion.setTimeQuestion(dateShift(nowQuestion.getTimeAnswer(), nextQuestion.getTimeQuestion()));
-//                    questionRepository.save(nextQuestion);
-//                    messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage());
-//                } else {
-//                    user.setStatus(UserStatus.DONE);
-//                    userRepository.save(user);
-//                    messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage());
-//                    messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_END.getBotMessage());
-//                }
-//            }
             interrupt();
         }
     }

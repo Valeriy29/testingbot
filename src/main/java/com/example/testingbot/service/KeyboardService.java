@@ -45,6 +45,10 @@ public class KeyboardService {
         return getKeyboard(message, text, ParamKeyboard.VERTICAL, TEST.getUserMessage());
     }
 
+    public SendMessage getAdminMenu(Message message, String text) {
+        return getKeyboard(message, text, ParamKeyboard.VERTICAL, USERS_INFO.getUserMessage());
+    }
+
     private SendMessage getKeyboard(Message message, String text, ParamKeyboard param, String... buttonText) {
         return sendMsgKeyboard(message, text, param, buttonText);
     }

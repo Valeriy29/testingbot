@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.List;
+
 import static com.example.testingbot.domain.UserStatus.*;
 import static com.example.testingbot.constant.UserInfo.*;
 
@@ -56,6 +58,20 @@ public class UserService {
                 ADDRESS_STORE.getUserInfo() + user.getStoreAddress() + NEXT_LINE.getUserInfo() +
                 POSITION.getUserInfo() + user.getPosition() + NEXT_LINE.getUserInfo() +
                 EXPERIENCE.getUserInfo() + user.getWorkExperience();
+    }
+
+    public String usersInfo() {
+        List<UserEntity> users = userRepository.findAllUsers();
+
+        StringBuilder sb = new StringBuilder();
+
+        if (users.size() > 0) {
+            users.forEach(u -> {
+                sb.append(u.getTelegramId()).append(" ").append(u.getLastName()).append(" ").append(u.getFirstName()).append("\n");
+            });
+            return sb.toString();
+        }
+        return "";
     }
 
     public void updateProfile(UserEntity user, String userData) {

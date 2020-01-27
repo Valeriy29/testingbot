@@ -15,7 +15,8 @@ public enum UserMessage {
     CHANGE("Изменить информацию"),
     SAVE("Сохранить информацию"),
     USER_INFO("Ваша информация"),
-    TEST("Ответить на вопрос");
+    TEST("Ответить на вопрос"),
+    USERS_INFO("Все пользователи");
 
 
     private String userMessage;
