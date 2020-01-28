@@ -53,6 +53,6 @@ public class TestingbotApplication implements CommandLineRunner {
 		} catch (TelegramApiRequestException e) {
 			e.printStackTrace();
 		}
-		imageMigration.migration();
+		//imageMigration.migration();
 	}
 }
