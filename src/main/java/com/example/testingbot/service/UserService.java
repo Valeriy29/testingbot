@@ -60,6 +60,14 @@ public class UserService {
                 EXPERIENCE.getUserInfo() + user.getWorkExperience();
     }
 
+    public String userInfoForAdmin(Integer telegramId) {
+        UserEntity user = userRepository.findUserEntityByTelegramId(telegramId);
+        if (user != null) {
+            return userInfo(user);
+        }
+        return BotMessage.USER_NOT_FOUND.getBotMessage();
+    }
+
     public String usersInfo() {
         List<UserEntity> users = userRepository.findAllUsers();
 

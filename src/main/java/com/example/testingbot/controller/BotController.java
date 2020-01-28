@@ -6,6 +6,7 @@ import com.example.testingbot.constant.UserMessage;
 import com.example.testingbot.domain.UserEntity;
 import com.example.testingbot.service.KeyboardService;
 import com.example.testingbot.service.QuestionService;
+import com.example.testingbot.service.StatService;
 import com.example.testingbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,12 +24,18 @@ public class BotController extends TelegramLongPollingBot {
     private final KeyboardService keyboardService;
     private final UserService userService;
     private final QuestionService questionService;
+    private final StatService statService;
+
+    private final static String REGEX_ID = "^\\d+$";
+    private boolean adminSearchId = false;
+    private boolean adminSearchStat = false;
 
     @Autowired
-    public BotController(KeyboardService keyboardService, UserService userService, QuestionService questionService) {
+    public BotController(KeyboardService keyboardService, UserService userService, QuestionService questionService, StatService statService) {
         this.keyboardService = keyboardService;
         this.userService = userService;
         this.questionService = questionService;
+        this.statService = statService;
     }
 
     @Override
@@ -145,7 +152,27 @@ public class BotController extends TelegramLongPollingBot {
                 }
 
                 if (message.getText().equals(UserMessage.USERS_INFO.getUserMessage())) {
-                    executeMessage(keyboardService.sendMsg(message, BotMessage.QUESTION_SEND.getBotMessage()));
+                    executeMessage(keyboardService.sendMsg(message, userService.usersInfo()));
+                }
+
+                if (message.getText().equals(UserMessage.USER_INFO_BY_TELEGRAM_ID.getUserMessage())) {
+                    adminSearchId = true;
+                    executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID.getBotMessage()));
+                }
+
+                if (message.getText().matches(REGEX_ID) && adminSearchId) {
+                    adminSearchId = false;
+                    executeMessage(keyboardService.sendMsg(message, userService.userInfoForAdmin(Integer.valueOf(message.getText()))));
+                }
+
+                if (message.getText().equals(UserMessage.USER_ANSWERS.getUserMessage())) {
+                    adminSearchStat = true;
+                    executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID.getBotMessage()));
+                }
+
+                if (message.getText().matches(REGEX_ID) && adminSearchStat) {
+                    adminSearchStat = false;
+                    statService.sendStat(Integer.valueOf(message.getText()));
                 }
 
             }

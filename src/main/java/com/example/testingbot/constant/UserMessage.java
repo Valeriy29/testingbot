@@ -16,7 +16,9 @@ public enum UserMessage {
     SAVE("Сохранить информацию"),
     USER_INFO("Ваша информация"),
     TEST("Ответить на вопрос"),
-    USERS_INFO("Все пользователи");
+    USERS_INFO("Все пользователи"),
+    USER_INFO_BY_TELEGRAM_ID("Найти инфо по Telegram ID"),
+    USER_ANSWERS("Все ответы пользователя");
 
 
     private String userMessage;

@@ -20,6 +20,7 @@ public interface QuestionRepository extends CrudRepository<QuestionEntity, Long>
     @Query(value = "SELECT * FROM questions WHERE allow_reply = true", nativeQuery = true)
     List<QuestionEntity> searchAllowedQuestion(Long userId);
 
-    QuestionEntity findByInnerId(Integer innerId);
+    @Query(value = "SELECT * FROM questions WHERE user_id = ?1 AND inner_id =?2", nativeQuery = true)
+    QuestionEntity findByInnerId(Long userId, Integer innerId);
 
 }

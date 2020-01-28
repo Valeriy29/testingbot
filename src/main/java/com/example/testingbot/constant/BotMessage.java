@@ -31,7 +31,9 @@ public enum BotMessage {
     QUESTION_SUCCESS("Встретимся в "),
     QUESTION_SEND("Ответ отправлен"),
     QUESTION_END("Спасибо за участие! Результаты сообщим позже"),
-    ADMIN_MENU("Кабинет администратора");
+    ADMIN_MENU("Кабинет администратора"),
+    USER_NOT_FOUND("Пользователь не найден"),
+    ENTER_ID("Введите ID пользователя:");
 
     private String botMessage;
 
