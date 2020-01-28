@@ -111,7 +111,9 @@ public class BotController extends TelegramLongPollingBot {
                                 questionService.crateQuestions(userEntity.getTelegramId());
 
                                 userService.updateUser(userEntity);
-                                executeMessage(keyboardService.getUserInfoMenu(message, BotMessage.PROFILE_SAVED.getBotMessage()));
+                                executeMessage(keyboardService.sendMsg(message, BotMessage.PROFILE_SAVED.getBotMessage()));
+                                executeMessage(keyboardService.getUserInfoMenu(message, BotMessage.FIRST_QUESTION.getBotMessage() + questionService.firstQuestion(userEntity)));
+
                             }
                             if (message.getText().equals(UserMessage.CHANGE.getUserMessage())) {
                                 userEntity.setStatus(UserStatus.REGISTRATION);

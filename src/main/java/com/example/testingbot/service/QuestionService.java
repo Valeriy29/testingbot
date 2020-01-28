@@ -33,6 +33,8 @@ public class QuestionService {
     private final static Integer TIME_FIRST_QUESTION = 12;
     private final static Integer TIME_SECOND_QUESTION = 18;
     private final static Integer HOURS_RANGE = 6;
+    // test minute
+    private final static Integer MINUTE_RANGE = 3;
     private final static String DATE_PATTERN = "HH:mm MM-dd ";
 
     @Autowired
@@ -46,9 +48,10 @@ public class QuestionService {
     }
 
     //@Scheduled(fixedDelay = 3600000)
+    //test
     @Scheduled(fixedDelay = 60000)
     public void sendQuestions() {
-        List<Long> usersId = userRepository.findAllUsersId();
+        List<Long> usersId = userRepository.findAllUsersIdByStatus(ACTIVE.name());
 
         usersId.forEach(id -> {
             List<QuestionEntity> questionList = questionRepository.findAllByUserId(id);
@@ -60,7 +63,7 @@ public class QuestionService {
                     Date newDate = new Date();
                     if (getTime(newDate, Calendar.DATE) == getTime(quest.getTimeQuestion(), Calendar.DATE)
                             && getTime(newDate, Calendar.HOUR_OF_DAY) == getTime(quest.getTimeQuestion(), Calendar.HOUR_OF_DAY)
-                            //remove next line
+                            //remove next line (test)
                             && getTime(newDate, Calendar.MINUTE) == getTime(quest.getTimeQuestion(), Calendar.MINUTE)
                             && (quest.getInnerId() == 0 || questionList.get(i - 1).getStatus().equals(PASSIVE))) {
                         Integer telegramId = userRepository.findTelegramIdById(id);
@@ -85,6 +88,14 @@ public class QuestionService {
             questionRepository.save(question);
             new AnswerTimer(user, questionRepository, userRepository, answerRepository, messageService).start();
         }
+    }
+
+    public String firstQuestion(UserEntity user) {
+        List<QuestionEntity> questions = questionRepository.findAllByUserId(user.getUserId());
+        questions.sort(Comparator.comparing(QuestionEntity::getInnerId));
+        QuestionEntity question = questions.get(0);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
+        return simpleDateFormat.format(question.getTimeQuestion());
     }
 
     public boolean questIsReady(UserEntity user) {
@@ -135,8 +146,14 @@ public class QuestionService {
         AtomicReference<Date> dateOne = new AtomicReference<>(new Date());
         AtomicReference<Date> dateTwo = new AtomicReference<>(new Date());
 
-        dateOne.set(setStartTime(dateOne.get(), TIME_FIRST_QUESTION));
-        dateTwo.set(setStartTime(dateTwo.get(), TIME_SECOND_QUESTION));
+//        dateOne.set(setStartTime(dateOne.get(), TIME_FIRST_QUESTION));
+//        dateTwo.set(setStartTime(dateTwo.get(), TIME_SECOND_QUESTION));
+        //test
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateOne.get());
+        calendar.add(Calendar.MINUTE, MINUTE_RANGE);
+        dateOne.set(calendar.getTime());
 
         AtomicInteger innerId = new AtomicInteger(0);
 
@@ -149,13 +166,20 @@ public class QuestionService {
                     question.setStatus(ACTIVE);
                     question.setReady(false);
 
-                    if (innerId.get() % 2 != 0) {
-                        dateOne.set(incrementDay(dateOne.get()));
-                        question.setTimeQuestion(dateOne.get());
-                    } else {
-                        dateTwo.set(incrementDay(dateTwo.get()));
-                        question.setTimeQuestion(dateTwo.get());
-                    }
+                    //test
+                    question.setTimeQuestion(dateOne.get());
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(dateOne.get());
+                    c.add(Calendar.MINUTE, 3);
+                    dateOne.set(c.getTime());
+
+//                    if (innerId.get() % 2 != 0) {
+//                        dateOne.set(incrementDay(dateOne.get()));
+//                        question.setTimeQuestion(dateOne.get());
+//                    } else {
+//                        dateTwo.set(incrementDay(dateTwo.get()));
+//                        question.setTimeQuestion(dateTwo.get());
+//                    }
 
                     return question;
                 }).collect(Collectors.toList())
@@ -190,23 +214,35 @@ public class QuestionService {
 
         if (now.after(next) || now.equals(next)) {
             calendar.setTime(now);
-            calendar.add(Calendar.HOUR_OF_DAY, HOURS_RANGE);
+            //calendar.add(Calendar.HOUR_OF_DAY, HOURS_RANGE);
+            //test
+            calendar.add(Calendar.MINUTE, MINUTE_RANGE);
             return calendar.getTime();
         } else {
             calendar.setTime(now);
             int dayNow = calendar.get(Calendar.DATE);
             int hourNow = calendar.get(Calendar.HOUR_OF_DAY);
+            //test
+            int minuteNow = calendar.get(Calendar.MINUTE);
             calendar.setTime(next);
             int dayNext = calendar.get(Calendar.DATE);
             int hourNext = calendar.get(Calendar.HOUR_OF_DAY);
+            //test
+            int minuteNext = calendar.get(Calendar.MINUTE);
 
-            if (dayNow == dayNext) {
-                if (hourNext - hourNow >= HOURS_RANGE) {
+            if (dayNow == dayNext && hourNow == hourNext /*test*/) {
+                //if (hourNext - hourNow >= HOURS_RANGE) {
+                //test
+                if (minuteNext - minuteNow >= MINUTE_RANGE) {
                     return next;
                 } else {
-                    int difference = hourNext - hourNow;
+                    //int difference = hourNext - hourNow;
+                    //test
+                    int difference = minuteNext - minuteNow;
                     calendar.setTime(next);
-                    calendar.add(Calendar.HOUR_OF_DAY, HOURS_RANGE - difference);
+                    //calendar.add(Calendar.HOUR_OF_DAY, HOURS_RANGE - difference);
+                    //test
+                    calendar.add(Calendar.MINUTE, MINUTE_RANGE - difference);
                     return calendar.getTime();
                 }
             }
@@ -216,7 +252,9 @@ public class QuestionService {
 
     public static class AnswerTimer extends Thread {
 
-        private final static Integer TIME_TO_ANSWER = 120000;
+        //private final static Integer TIME_TO_ANSWER = 120000;
+        //test
+        private final static Integer TIME_TO_ANSWER = 60000;
         private final UserEntity user;
         private final QuestionRepository questionRepository;
         private final MessageService messageService;
@@ -282,8 +320,8 @@ public class QuestionService {
                 userRepository.save(user);
                 messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage() + getAnswersByQuestion(question.getQuestionId()), BASIC_URL.getConstant());
                 messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_END.getBotMessage(), BASIC_URL.getConstant());
+                questionRepository.save(question);
             }
-
             interrupt();
         }
     }

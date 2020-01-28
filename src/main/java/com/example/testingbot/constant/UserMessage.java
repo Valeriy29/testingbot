@@ -3,22 +3,24 @@ package com.example.testingbot.constant;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.testingbot.service.KeyboardService.emoji;
+
 public enum UserMessage {
 
     START("/start"),
-    REGISTRATION("Регистрация"),
-    PROFILE("Заполнить анкету"),
-    MALE("М"),
-    FEMALE("Ж"),
-    MARRIED("Замужем, женат"),
-    SINGLE("Не замужем, не женат"),
-    CHANGE("Изменить информацию"),
-    SAVE("Сохранить информацию"),
-    USER_INFO("Ваша информация"),
-    TEST("Ответить на вопрос"),
-    USERS_INFO("Все пользователи"),
-    USER_INFO_BY_TELEGRAM_ID("Найти инфо по Telegram ID"),
-    USER_ANSWERS("Все ответы пользователя");
+    REGISTRATION(emoji(":arrow_forward:") + " " + "Регистрация"),
+    PROFILE(emoji(":pencil2:") + " " + "Заполнить анкету"),
+    MALE(emoji(":man_office_worker:") + " " + "М"),
+    FEMALE(emoji(":woman_office_worker:") + " " + "Ж"),
+    MARRIED(emoji(":busts_in_silhouette:") + " " + "Замужем, женат"),
+    SINGLE(emoji(":bust_in_silhouette:") + " " + "Не замужем, не женат"),
+    CHANGE(emoji(":recycle:") + " " + "Изменить информацию"),
+    SAVE(emoji(":white_check_mark:") + " " + "Сохранить информацию"),
+    USER_INFO(emoji(":page_facing_up:") + " " + "Ваша информация"),
+    TEST(emoji(":speaking_head_in_silhouette:") + " " + "Ответить на вопрос"),
+    USERS_INFO(emoji(":bust_in_silhouette:") + " " + "Все пользователи"),
+    USER_INFO_BY_TELEGRAM_ID(emoji(":mag:") + " " + "Найти инфо по Telegram ID"),
+    USER_ANSWERS(emoji(":page_with_curl:") + " " + "Все ответы пользователя");
 
 
     private String userMessage;

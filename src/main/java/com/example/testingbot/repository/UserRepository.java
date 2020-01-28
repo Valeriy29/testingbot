@@ -18,6 +18,9 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     @Query(value = "SELECT user_id FROM users", nativeQuery = true)
     List<Long> findAllUsersId();
 
+    @Query(value = "SELECT user_id FROM users WHERE status = ?1", nativeQuery = true)
+    List<Long> findAllUsersIdByStatus(String status);
+
     @Query(value = "SELECT telegram_id FROM users WHERE user_id = ?1", nativeQuery = true)
     Integer findTelegramIdById(Long userId);
 }

@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.testingbot.constant.BotMessage.*;
+
 @Service
 public class StatService {
 
@@ -21,6 +23,9 @@ public class StatService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final MessageService messageService;
+
+    private static final Integer FIRST_INDEX = 0;
+    private static final Integer LAST_INDEX = 9;
 
     @Autowired
     public StatService(UserRepository userRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, MessageService messageService) {
@@ -34,14 +39,14 @@ public class StatService {
         UserEntity user = userRepository.findUserEntityByTelegramId(telegramId);
 
         if (user != null) {
-            QuestionEntity questionStart = questionRepository.findByInnerId(user.getUserId(), 0);
-            QuestionEntity questionFinish = questionRepository.findByInnerId(user.getUserId(), 9);
+            QuestionEntity questionStart = questionRepository.findByInnerId(user.getUserId(), FIRST_INDEX);
+            QuestionEntity questionFinish = questionRepository.findByInnerId(user.getUserId(), LAST_INDEX);
 
             messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()),
-                    "Дата начала теста: " + Optional.ofNullable(questionStart.getTimeAnswer()).map(Date::toString).orElse("no data"),
+                    START_TEST_TIME.getBotMessage() + Optional.ofNullable(questionStart.getTimeAnswer()).map(Date::toString).orElse(TEST_NO_START.getBotMessage()),
                     Admin.BASIC_URL.getConstant());
             messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()),
-                    "Дата окончания теста: " + Optional.ofNullable(questionFinish.getTimeAnswer()).map(Date::toString).orElse("no data"),
+                    FINISH_TEST_TIME.getBotMessage() + Optional.ofNullable(questionFinish.getTimeAnswer()).map(Date::toString).orElse(TEST_NO_FINISH.getBotMessage()),
                     Admin.BASIC_URL.getConstant());
 
             List<QuestionEntity> questions = questionRepository.findAllByUserId(user.getUserId());
