@@ -16,6 +16,7 @@ public enum Admin {
 
     private String constant;
 
+
     Admin(String constant) {
         this.constant = constant;
     }
