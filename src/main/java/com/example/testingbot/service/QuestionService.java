@@ -315,7 +315,7 @@ public class QuestionService {
                 questionRepository.save(nextQuestion);
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
-                Date d = question.getTimeQuestion();
+                Date d = nextQuestion.getTimeQuestion();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(d);
                 calendar.add(Calendar.HOUR_OF_DAY, 3);
