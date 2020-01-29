@@ -43,8 +43,8 @@ public class BotController extends TelegramLongPollingBot {
         this.statService = statService;
     }
 
-    @Autowired
-    private PhotoRepo photoRepo;
+//    @Autowired
+//    private PhotoRepo photoRepo;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -63,10 +63,10 @@ public class BotController extends TelegramLongPollingBot {
             executeMessage(keyboardService.sendInlineMsg(update));
         }
 
-        List<PhotoSize> photoSizeList = message.getPhoto();
-        PhotoEntity entity = new PhotoEntity();
-        entity.setFileId(photoSizeList.get(0).getFileId());
-        photoRepo.save(entity);
+//        List<PhotoSize> photoSizeList = message.getPhoto();
+//        PhotoEntity entity = new PhotoEntity();
+//        entity.setFileId(photoSizeList.get(0).getFileId());
+//        photoRepo.save(entity);
 
         if (message.hasText()) {
 

@@ -139,7 +139,7 @@ public class QuestionService {
 
         int count = 0;
         while (count != COUNT_OF_IMAGE) {
-            String link = images.get(new Random().nextInt(images.size())).getLink();
+            String link = images.get(new Random().nextInt(images.size() + 1)).getLink();
 
             if (!imagesForQuestions.contains(link)) {
                 imagesForQuestions.add(link);
