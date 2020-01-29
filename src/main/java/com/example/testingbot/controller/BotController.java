@@ -33,7 +33,7 @@ public class BotController extends TelegramLongPollingBot {
 
     private final static String REGEX_ID = "^\\d+$";
     private boolean adminSearchId = false;
-    private boolean adminSearchStat = false;
+    //private boolean adminSearchStat = false;
 
     @Autowired
     public BotController(KeyboardService keyboardService, UserService userService, QuestionService questionService, StatService statService) {
@@ -179,17 +179,18 @@ public class BotController extends TelegramLongPollingBot {
                 if (message.getText().matches(REGEX_ID) && adminSearchId) {
                     adminSearchId = false;
                     executeMessage(keyboardService.sendMsg(message, userService.userInfoForAdmin(Integer.valueOf(message.getText()))));
-                }
-
-                if (message.getText().equals(UserMessage.USER_ANSWERS.getUserMessage())) {
-                    adminSearchStat = true;
-                    executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID.getBotMessage()));
-                }
-
-                if (message.getText().matches(REGEX_ID) && adminSearchStat) {
-                    adminSearchStat = false;
                     statService.sendStat(Integer.valueOf(message.getText()));
                 }
+
+//                if (message.getText().equals(UserMessage.USER_ANSWERS.getUserMessage())) {
+//                    adminSearchStat = true;
+//                    executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID.getBotMessage()));
+//                }
+//
+//                if (message.getText().matches(REGEX_ID) && adminSearchStat) {
+//                    adminSearchStat = false;
+//                    statService.sendStat(Integer.valueOf(message.getText()));
+//                }
 
             }
         }

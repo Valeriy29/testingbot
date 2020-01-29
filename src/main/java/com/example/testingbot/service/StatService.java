@@ -54,7 +54,7 @@ public class StatService {
                 dateString = TEST_NO_START.getBotMessage();
             }
 
-            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()),
+            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_3.getConstant()),
                     START_TEST_TIME.getBotMessage() + dateString,
                     Admin.BASIC_URL.getConstant());
 
@@ -64,27 +64,27 @@ public class StatService {
                 calendar.add(Calendar.HOUR_OF_DAY, 3);
                 dateString = calendar.getTime().toString();;
             } else {
-                dateString = TEST_NO_START.getBotMessage();
+                dateString = TEST_NO_FINISH.getBotMessage();
             }
 
-            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()),
+            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_3.getConstant()),
                     FINISH_TEST_TIME.getBotMessage() + dateString,
                     Admin.BASIC_URL.getConstant());
 
-            List<QuestionEntity> questions = questionRepository.findAllByUserId(user.getUserId());
-            if (questions.size() > 0) {
-                questions.forEach(q -> {
-                    List<AnswerEntity> answers = answerRepository.findAllByQuestionId(q.getQuestionId());
-                    StringBuilder sb = new StringBuilder();
-                    if (answers.size() > 0) {
-                        answers.forEach(a -> {
-                            sb.append(a.getText()).append("\n");
-                        });
-                    }
-                    messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()), q.getImage(), Admin.BASIC_URL_PHOTO.getConstant());
-                    messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()), sb.toString(), Admin.BASIC_URL.getConstant());
-                });
-            }
+//            List<QuestionEntity> questions = questionRepository.findAllByUserId(user.getUserId());
+//            if (questions.size() > 0) {
+//                questions.forEach(q -> {
+//                    List<AnswerEntity> answers = answerRepository.findAllByQuestionId(q.getQuestionId());
+//                    StringBuilder sb = new StringBuilder();
+//                    if (answers.size() > 0) {
+//                        answers.forEach(a -> {
+//                            sb.append(a.getText()).append("\n");
+//                        });
+//                    }
+//                    messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()), q.getImage(), Admin.BASIC_URL_PHOTO.getConstant());
+//                    messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()), sb.toString(), Admin.BASIC_URL.getConstant());
+//                });
+//            }
         }
     }
 
