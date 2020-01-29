@@ -35,7 +35,7 @@ public class QuestionService {
     private final static Integer HOURS_RANGE = 6;
     // test minute
     private final static Integer MINUTE_RANGE = 3;
-    private final static String DATE_PATTERN = "HH:mm MM-dd ";
+    private final static String DATE_PATTERN = "HH:mm MM.dd ";
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository, ImageRepository imageRepository, UserRepository userRepository,
@@ -95,7 +95,11 @@ public class QuestionService {
         questions.sort(Comparator.comparing(QuestionEntity::getInnerId));
         QuestionEntity question = questions.get(0);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
-        return simpleDateFormat.format(question.getTimeQuestion());
+        Date date = question.getTimeQuestion();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, 4);
+        return simpleDateFormat.format(calendar.getTime());
     }
 
     public boolean questIsReady(UserEntity user) {
@@ -311,7 +315,11 @@ public class QuestionService {
                 questionRepository.save(nextQuestion);
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
-                String date = simpleDateFormat.format(nextQuestion.getTimeQuestion());
+                Date d = question.getTimeQuestion();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(d);
+                calendar.add(Calendar.HOUR_OF_DAY, 4);
+                String date = simpleDateFormat.format(calendar.getTime());
 
                 messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage() + getAnswersByQuestion(question.getQuestionId()), BASIC_URL.getConstant());
                 messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_SUCCESS.getBotMessage() + date, BASIC_URL.getConstant());

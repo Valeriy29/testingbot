@@ -10,6 +10,7 @@ import com.example.testingbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,11 +43,32 @@ public class StatService {
             QuestionEntity questionStart = questionRepository.findByInnerId(user.getUserId(), FIRST_INDEX);
             QuestionEntity questionFinish = questionRepository.findByInnerId(user.getUserId(), LAST_INDEX);
 
+            String dateString;
+            Calendar calendar = Calendar.getInstance();
+            if (questionStart.getTimeAnswer() != null) {
+                Date date = questionStart.getTimeAnswer();
+                calendar.setTime(date);
+                calendar.add(Calendar.HOUR_OF_DAY, 4);
+                dateString = calendar.getTime().toString();;
+            } else {
+                dateString = TEST_NO_START.getBotMessage();
+            }
+
             messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()),
-                    START_TEST_TIME.getBotMessage() + Optional.ofNullable(questionStart.getTimeAnswer()).map(Date::toString).orElse(TEST_NO_START.getBotMessage()),
+                    START_TEST_TIME.getBotMessage() + dateString,
                     Admin.BASIC_URL.getConstant());
+
+            if (questionFinish.getTimeAnswer() != null) {
+                Date date = questionFinish.getTimeAnswer();
+                calendar.setTime(date);
+                calendar.add(Calendar.HOUR_OF_DAY, 4);
+                dateString = calendar.getTime().toString();;
+            } else {
+                dateString = TEST_NO_START.getBotMessage();
+            }
+
             messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()),
-                    FINISH_TEST_TIME.getBotMessage() + Optional.ofNullable(questionFinish.getTimeAnswer()).map(Date::toString).orElse(TEST_NO_FINISH.getBotMessage()),
+                    FINISH_TEST_TIME.getBotMessage() + dateString,
                     Admin.BASIC_URL.getConstant());
 
             List<QuestionEntity> questions = questionRepository.findAllByUserId(user.getUserId());
