@@ -48,7 +48,7 @@ public class StatService {
             if (questionStart.getTimeAnswer() != null) {
                 Date date = questionStart.getTimeAnswer();
                 calendar.setTime(date);
-                calendar.add(Calendar.HOUR_OF_DAY, 4);
+                calendar.add(Calendar.HOUR_OF_DAY, 3);
                 dateString = calendar.getTime().toString();;
             } else {
                 dateString = TEST_NO_START.getBotMessage();
@@ -61,7 +61,7 @@ public class StatService {
             if (questionFinish.getTimeAnswer() != null) {
                 Date date = questionFinish.getTimeAnswer();
                 calendar.setTime(date);
-                calendar.add(Calendar.HOUR_OF_DAY, 4);
+                calendar.add(Calendar.HOUR_OF_DAY, 3);
                 dateString = calendar.getTime().toString();;
             } else {
                 dateString = TEST_NO_START.getBotMessage();

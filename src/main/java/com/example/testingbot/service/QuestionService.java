@@ -98,7 +98,7 @@ public class QuestionService {
         Date date = question.getTimeQuestion();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.add(Calendar.HOUR_OF_DAY, 4);
+        calendar.add(Calendar.HOUR_OF_DAY, 3);
         return simpleDateFormat.format(calendar.getTime());
     }
 
@@ -318,7 +318,7 @@ public class QuestionService {
                 Date d = question.getTimeQuestion();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(d);
-                calendar.add(Calendar.HOUR_OF_DAY, 4);
+                calendar.add(Calendar.HOUR_OF_DAY, 3);
                 String date = simpleDateFormat.format(calendar.getTime());
 
                 messageService.sendMessageToUser(telegramId, BotMessage.QUESTION_FAIL.getBotMessage() + getAnswersByQuestion(question.getQuestionId()), BASIC_URL.getConstant());
