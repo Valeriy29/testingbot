@@ -1,9 +1,11 @@
 package com.example.testingbot.controller;
 
 import com.example.testingbot.constant.BotMessage;
+import com.example.testingbot.domain.PhotoEntity;
 import com.example.testingbot.domain.UserStatus;
 import com.example.testingbot.constant.UserMessage;
 import com.example.testingbot.domain.UserEntity;
+import com.example.testingbot.repository.PhotoRepo;
 import com.example.testingbot.service.KeyboardService;
 import com.example.testingbot.service.QuestionService;
 import com.example.testingbot.service.StatService;
@@ -13,8 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.List;
 
 import static com.example.testingbot.constant.Admin.*;
 
@@ -38,6 +43,9 @@ public class BotController extends TelegramLongPollingBot {
         this.statService = statService;
     }
 
+    @Autowired
+    private PhotoRepo photoRepo;
+
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
@@ -54,6 +62,11 @@ public class BotController extends TelegramLongPollingBot {
         if (update.hasCallbackQuery()) {
             executeMessage(keyboardService.sendInlineMsg(update));
         }
+
+        List<PhotoSize> photoSizeList = message.getPhoto();
+        PhotoEntity entity = new PhotoEntity();
+        entity.setFileId(photoSizeList.get(0).getFileId());
+        photoRepo.save(entity);
 
         if (message.hasText()) {
 
