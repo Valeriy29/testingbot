@@ -10,7 +10,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import static com.example.testingbot.constant.Admin.BASIC_URL;
 import static com.example.testingbot.constant.Admin.TOKEN;
 
 @Service
