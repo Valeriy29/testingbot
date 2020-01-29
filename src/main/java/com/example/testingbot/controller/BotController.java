@@ -70,7 +70,8 @@ public class BotController extends TelegramLongPollingBot {
 
         if (message.hasText()) {
 
-            if (!message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID.getConstant())) && !message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID_2.getConstant()))) {
+            if (!message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID.getConstant())) && !message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID_2.getConstant()))
+            && !message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID_3.getConstant()))) {
 
                 if (!userService.userExists(userEntity)) {
 
