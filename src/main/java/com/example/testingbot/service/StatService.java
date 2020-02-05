@@ -42,7 +42,7 @@ public class StatService {
 
     public void sendImage(Long imageId) {
         ImageEntity image = imageRepository.findById(imageId).get();
-        messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_3.getConstant()), image.getLink(), Admin.BASIC_URL_PHOTO.getConstant());
+        messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_2.getConstant()), image.getLink(), Admin.BASIC_URL_PHOTO.getConstant());
     }
 
 
@@ -59,12 +59,12 @@ public class StatService {
                 Date date = questionStart.getTimeAnswer();
                 calendar.setTime(date);
                 calendar.add(Calendar.HOUR_OF_DAY, 3);
-                dateString = calendar.getTime().toString();;
+                dateString = calendar.getTime().toString();
             } else {
                 dateString = TEST_NO_START.getBotMessage();
             }
 
-            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_3.getConstant()),
+            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_2.getConstant()),
                     START_TEST_TIME.getBotMessage() + dateString,
                     Admin.BASIC_URL.getConstant());
 
@@ -72,12 +72,12 @@ public class StatService {
                 Date date = questionFinish.getTimeAnswer();
                 calendar.setTime(date);
                 calendar.add(Calendar.HOUR_OF_DAY, 3);
-                dateString = calendar.getTime().toString();;
+                dateString = calendar.getTime().toString();
             } else {
                 dateString = TEST_NO_FINISH.getBotMessage();
             }
 
-            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_3.getConstant()),
+            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_2.getConstant()),
                     FINISH_TEST_TIME.getBotMessage() + dateString,
                     Admin.BASIC_URL.getConstant());
 

@@ -36,7 +36,7 @@ public class BotController extends TelegramLongPollingBot {
     private final static String REGEX_MONTHS = "\\d{1,3}";
     private boolean adminSearchId = false;
     //private boolean adminSearchStat = false;
-    private boolean findImage = false;
+    //private boolean findImage = false;
 
     @Autowired
     public BotController(KeyboardService keyboardService, UserService userService, QuestionService questionService, StatService statService) {
@@ -224,15 +224,15 @@ public class BotController extends TelegramLongPollingBot {
                     statService.sendStat(Integer.valueOf(message.getText()));
                 }
 
-                if (message.getText().equals(UserMessage.FIND_DOC.getUserMessage())) {
-                    findImage = true;
-                    executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID_DOC.getBotMessage()));
-                }
-
-                if (findImage && message.getText().matches(REGEX_MONTHS)) {
-                    findImage = false;
-                    statService.sendImage(Long.valueOf(message.getText()));
-                }
+//                if (message.getText().equals(UserMessage.FIND_DOC.getUserMessage())) {
+//                    findImage = true;
+//                    executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID_DOC.getBotMessage()));
+//                }
+//
+//                if (findImage && message.getText().matches(REGEX_MONTHS)) {
+//                    findImage = false;
+//                    statService.sendImage(Long.valueOf(message.getText()));
+//                }
 
 //                if (message.getText().equals(UserMessage.USER_ANSWERS.getUserMessage())) {
 //                    adminSearchStat = true;
