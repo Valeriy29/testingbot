@@ -229,7 +229,7 @@ public class BotController extends TelegramLongPollingBot {
                     executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID_DOC.getBotMessage()));
                 }
 
-                if (findImage) {
+                if (findImage && message.getText().matches(REGEX_MONTHS)) {
                     findImage = false;
                     statService.sendImage(Long.valueOf(message.getText()));
                 }
