@@ -19,4 +19,7 @@ public class ImageEntity {
 
     @Column(name = "link")
     private String link;
+
+    @Column(name = "name")
+    private String name;
 }

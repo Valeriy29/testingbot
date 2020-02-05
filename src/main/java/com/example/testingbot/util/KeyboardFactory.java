@@ -21,12 +21,12 @@ public class KeyboardFactory {
     private KeyboardFactory() {
     }
 
-    public static ReplyKeyboard buildKeyboard(ParamKeyboard param, SendMessage sendMessage, String... text) {
+    public static ReplyKeyboard buildKeyboard(ParamKeyboard param, boolean oneTime, SendMessage sendMessage, String... text) {
         switch (param) {
             case VERTICAL:
-                return getVerticalButtons(sendMessage, text);
+                return getVerticalButtons(sendMessage, text).setOneTimeKeyboard(oneTime);
             case HORIZONTAL:
-                return getHorizontalButtons(sendMessage, text);
+                return getHorizontalButtons(sendMessage, text).setOneTimeKeyboard(oneTime);
             case VERTICAL_INLINE:
                 return getInlineVerticalButtons(text);
             default:

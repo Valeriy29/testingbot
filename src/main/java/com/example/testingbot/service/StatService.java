@@ -2,9 +2,11 @@ package com.example.testingbot.service;
 
 import com.example.testingbot.constant.Admin;
 import com.example.testingbot.domain.AnswerEntity;
+import com.example.testingbot.domain.ImageEntity;
 import com.example.testingbot.domain.QuestionEntity;
 import com.example.testingbot.domain.UserEntity;
 import com.example.testingbot.repository.AnswerRepository;
+import com.example.testingbot.repository.ImageRepository;
 import com.example.testingbot.repository.QuestionRepository;
 import com.example.testingbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +26,25 @@ public class StatService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final MessageService messageService;
+    private final ImageRepository imageRepository;
 
     private static final Integer FIRST_INDEX = 0;
     private static final Integer LAST_INDEX = 9;
 
     @Autowired
-    public StatService(UserRepository userRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, MessageService messageService) {
+    public StatService(UserRepository userRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, MessageService messageService, ImageRepository imageRepository) {
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
         this.messageService = messageService;
+        this.imageRepository = imageRepository;
     }
+
+    public void sendImage(Long imageId) {
+        ImageEntity image = imageRepository.findById(imageId).get();
+        messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_3.getConstant()), image.getLink(), Admin.BASIC_URL_PHOTO.getConstant());
+    }
+
 
     public void sendStat(Integer telegramId) {
         UserEntity user = userRepository.findUserEntityByTelegramId(telegramId);

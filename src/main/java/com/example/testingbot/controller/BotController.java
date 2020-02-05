@@ -32,8 +32,11 @@ public class BotController extends TelegramLongPollingBot {
     private final StatService statService;
 
     private final static String REGEX_ID = "^\\d+$";
+    private final static String REGEX_PHONE = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
+    private final static String REGEX_MONTHS = "\\d{1,3}";
     private boolean adminSearchId = false;
     //private boolean adminSearchStat = false;
+    private boolean findImage = false;
 
     @Autowired
     public BotController(KeyboardService keyboardService, UserService userService, QuestionService questionService, StatService statService) {
@@ -43,8 +46,8 @@ public class BotController extends TelegramLongPollingBot {
         this.statService = statService;
     }
 
-//    @Autowired
-//    private PhotoRepo photoRepo;
+    @Autowired
+    private PhotoRepo photoRepo;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -63,15 +66,15 @@ public class BotController extends TelegramLongPollingBot {
             executeMessage(keyboardService.sendInlineMsg(update));
         }
 
-//        List<PhotoSize> photoSizeList = message.getPhoto();
-//        PhotoEntity entity = new PhotoEntity();
-//        entity.setFileId(photoSizeList.get(0).getFileId());
-//        photoRepo.save(entity);
+        List<PhotoSize> photoSizeList = message.getPhoto();
+        PhotoEntity entity = new PhotoEntity();
+        entity.setFileId(photoSizeList.get(0).getFileId());
+        photoRepo.save(entity);
 
         if (message.hasText()) {
 
             if (!message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID.getConstant())) && !message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID_2.getConstant()))
-            && !message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID_3.getConstant()))) {
+                    && !message.getFrom().getId().equals(Integer.valueOf(ADMIN_ID_3.getConstant()))) {
 
                 if (!userService.userExists(userEntity)) {
 
@@ -97,7 +100,33 @@ public class BotController extends TelegramLongPollingBot {
                         }
 
                         if (!message.getText().equals(UserMessage.PROFILE.getUserMessage()) && userEntity.getStatus().equals(UserStatus.PROFILE)) {
-                            userService.updateProfile(userEntity, message.getText());
+                            if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_PHONE_STAGE.getBotMessage())) {
+                                if (!message.getText().matches(REGEX_PHONE)) {
+                                    executeMessage(keyboardService.sendMsg(message, BotMessage.WRONG_PHONE.getBotMessage()));
+                                } else {
+                                    userService.updateProfile(userEntity, message.getText());
+                                }
+                            } else if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_CITY_STAGE.getBotMessage())) {
+                                if (!UserMessage.getCitiesMessage().contains(message.getText())) {
+                                    executeMessage(keyboardService.getCitiesMenu(message, BotMessage.WRONG_CITY.getBotMessage()));
+                                } else {
+                                    userService.updateProfile(userEntity, message.getText());
+                                }
+                            } else if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_POSITION_STAGE.getBotMessage())) {
+                                if (!UserMessage.getPositionsMessage().contains(message.getText())) {
+                                    executeMessage(keyboardService.getPositionsMenu(message, BotMessage.WRONG_POSITION.getBotMessage()));
+                                } else {
+                                    userService.updateProfile(userEntity, message.getText());
+                                }
+                            } else if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_EXP_STAGE.getBotMessage())) {
+                                if (!message.getText().matches(REGEX_MONTHS)) {
+                                    executeMessage(keyboardService.getPositionsMenu(message, BotMessage.WRONG_EXPERIENCE.getBotMessage()));
+                                } else {
+                                    userService.updateProfile(userEntity, message.getText());
+                                }
+                            } else {
+                                userService.updateProfile(userEntity, message.getText());
+                            }
                         }
 
                         if (userEntity.getStatus().equals(UserStatus.PROFILE)) {
@@ -107,6 +136,18 @@ public class BotController extends TelegramLongPollingBot {
                                 }
                                 if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_MARITAL_STAGE.getBotMessage())) {
                                     executeMessage(keyboardService.getMaritalMenu(message, userService.getProfileQuestion(userEntity)));
+                                }
+                                if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_PHONE_STAGE.getBotMessage())) {
+                                    executeMessage(keyboardService.sendMsg(message, userService.getProfileQuestion(userEntity)));
+                                }
+                                if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_CITY_STAGE.getBotMessage())) {
+                                    executeMessage(keyboardService.getCitiesMenu(message, userService.getProfileQuestion(userEntity)));
+                                }
+                                if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_POSITION_STAGE.getBotMessage())) {
+                                    executeMessage(keyboardService.getPositionsMenu(message, userService.getProfileQuestion(userEntity)));
+                                }
+                                if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_EXP_STAGE.getBotMessage())) {
+                                    executeMessage(keyboardService.sendMsg(message, userService.getProfileQuestion(userEntity)));
                                 }
                             } else {
                                 if (String.valueOf(userEntity.getRegistrationStage()).equals(BotMessage.PROFILE_ALL_STAGES.getBotMessage())) {
@@ -126,7 +167,8 @@ public class BotController extends TelegramLongPollingBot {
 
                                 userService.updateUser(userEntity);
                                 executeMessage(keyboardService.sendMsg(message, BotMessage.PROFILE_SAVED.getBotMessage()));
-                                executeMessage(keyboardService.getUserInfoMenu(message, BotMessage.FIRST_QUESTION.getBotMessage() + questionService.firstQuestion(userEntity)));
+                                executeMessage(keyboardService.sendMsg(message, BotMessage.FIRST_QUESTION.getBotMessage() + questionService.firstQuestion(userEntity)));
+                                executeMessage(keyboardService.getUserInfoMenu(message, BotMessage.DESCRIPTION_TASK.getBotMessage()));
 
                             }
                             if (message.getText().equals(UserMessage.CHANGE.getUserMessage())) {
@@ -180,6 +222,17 @@ public class BotController extends TelegramLongPollingBot {
                     adminSearchId = false;
                     executeMessage(keyboardService.sendMsg(message, userService.userInfoForAdmin(Integer.valueOf(message.getText()))));
                     statService.sendStat(Integer.valueOf(message.getText()));
+                }
+
+                if (message.getText().equals(UserMessage.FIND_DOC.getUserMessage())) {
+                    findImage = true;
+                    executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID_DOC.getBotMessage()));
+                }
+
+                if (findImage) {
+                    findImage = false;
+                    executeMessage(keyboardService.sendMsg(message, userService.userInfoForAdmin(Integer.valueOf(message.getText()))));
+                    statService.sendImage(Long.valueOf(message.getText()));
                 }
 
 //                if (message.getText().equals(UserMessage.USER_ANSWERS.getUserMessage())) {

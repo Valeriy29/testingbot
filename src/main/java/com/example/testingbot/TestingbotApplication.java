@@ -47,7 +47,6 @@ public class TestingbotApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//ApiContextInitializer.init();
 		try {
 			getTelegramBotsApi().registerBot(botController);
 		} catch (TelegramApiRequestException e) {
