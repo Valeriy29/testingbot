@@ -20,6 +20,6 @@ public class ImageEntity {
     @Column(name = "link")
     private String link;
 
-    @Column(name = "name")
+    @Column(name = "name_image")
     private String name;
 }
