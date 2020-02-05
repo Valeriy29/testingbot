@@ -231,7 +231,6 @@ public class BotController extends TelegramLongPollingBot {
 
                 if (findImage) {
                     findImage = false;
-                    executeMessage(keyboardService.sendMsg(message, userService.userInfoForAdmin(Integer.valueOf(message.getText()))));
                     statService.sendImage(Long.valueOf(message.getText()));
                 }
 
