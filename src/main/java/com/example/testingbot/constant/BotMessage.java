@@ -36,7 +36,7 @@ public enum BotMessage {
     PROFILE_SAVED(emoji(":white_check_mark:") + " " + "Ваша анкета сохранена"),
     READY(emoji(":question:") + " " + "Поступил новый вопрос, Вы готовы? У вас будет 2 минуты на ответ"),
     NO_QUESTION(emoji(":no_entry:") + " " + "Вопрос еще не готов, ожидайте"),
-    QUESTION_TEXT("Что Вы видите на изображении?"),
+    QUESTION_TEXT("Напишите нестандартные способы применения этого предмета"),
     QUESTION_FAIL(emoji(":clock2:") + emoji(":exclamation:") + " " + "Этот раунд завершен, я записал такие ваши ответы: "),
     QUESTION_SUCCESS("Встретимся в "),
     QUESTION_SEND(emoji(":white_check_mark:") + " " + "Ответ получен"),
