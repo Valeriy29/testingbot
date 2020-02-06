@@ -13,4 +13,7 @@ public interface ImageRepository extends CrudRepository<ImageEntity, Long> {
     @Query(value = "SELECT * FROM images", nativeQuery = true)
     List<ImageEntity> findAllImages();
 
+    @Query(value = "SELECT * FROM images WHERE link = ?1", nativeQuery = true)
+    ImageEntity findByImageName(String name);
+
 }
