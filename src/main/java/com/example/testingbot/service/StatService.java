@@ -74,7 +74,7 @@ public class StatService {
                 }
             });
         }
-        File file = new File("report.txt");
+        File file = new File(Admin.FILE_REPORT.getConstant());
         try (FileWriter fileWriter = new FileWriter(file)) {
             for (String s : strings) {
                 fileWriter.write(s);
@@ -83,7 +83,6 @@ public class StatService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return file;
     }

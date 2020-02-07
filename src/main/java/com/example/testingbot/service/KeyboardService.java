@@ -55,7 +55,7 @@ public class KeyboardService {
     }
 
     public SendMessage getAdminMenu(Message message, String text) {
-        return getKeyboard(message, text, ParamKeyboard.VERTICAL, false, USERS_INFO.getUserMessage(), USER_INFO_BY_TELEGRAM_ID.getUserMessage(), FIND_DOC.getUserMessage());
+        return getKeyboard(message, text, ParamKeyboard.VERTICAL, false, USERS_INFO.getUserMessage(), USER_INFO_BY_TELEGRAM_ID.getUserMessage(), REPORT.getUserMessage());
     }
 
     private SendMessage getKeyboard(Message message, String text, ParamKeyboard param, boolean oneTime, String... buttonText) {

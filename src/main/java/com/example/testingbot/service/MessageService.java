@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 
-import static com.example.testingbot.constant.Admin.TOKEN;
+import java.io.File;
+
+import static com.example.testingbot.constant.Admin.*;
 
 @Service
 @Slf4j
@@ -37,6 +41,13 @@ public class MessageService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public SendDocument getDocument(File file, Integer telegramId) {
+        SendDocument sendDocument = new SendDocument();
+        sendDocument.setChatId(String.valueOf(telegramId));
+        sendDocument.setDocument(new InputFile(file, FILE_REPORT.getConstant()));
+        return sendDocument;
     }
 
 }

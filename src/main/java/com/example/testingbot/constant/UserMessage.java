@@ -26,6 +26,7 @@ public enum UserMessage {
     USERS_INFO(emoji(":bust_in_silhouette:") + " " + "Все пользователи"),
     USER_INFO_BY_TELEGRAM_ID(emoji(":mag:") + " " + "Найти инфо по Telegram ID"),
     FIND_DOC("Найти картинку по doc id"),
+    REPORT("Сформировать отчет"),
     USER_ANSWERS(emoji(":page_with_curl:") + " " + "Все ответы пользователя");
 
 

@@ -12,15 +12,16 @@ public enum Admin {
     //TOKEN("920411958:AAEjN4VyKGZYkoKZalvdIfhD0PROnFGtwL0"),
     //BOT_NAME("dating_zp_bot"),
 
-
     ADMIN_ID("11111111"),
     //ADMIN_ID("20419906"),
     ADMIN_ID_2("654323"),
-    //ADMIN_ID_3("370678219"),
-    ADMIN_ID_3("11111111"),
+    ADMIN_ID_3("370678219"),
+    //ADMIN_ID_3("11111111"),
 
     BASIC_URL("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s"),
-    BASIC_URL_PHOTO("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&photo=%s");
+    BASIC_URL_PHOTO("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&photo=%s"),
+
+    FILE_REPORT("report.txt");
 
     private String constant;
 

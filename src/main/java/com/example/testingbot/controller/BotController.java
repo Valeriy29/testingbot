@@ -6,19 +6,19 @@ import com.example.testingbot.domain.UserStatus;
 import com.example.testingbot.constant.UserMessage;
 import com.example.testingbot.domain.UserEntity;
 import com.example.testingbot.repository.PhotoRepo;
-import com.example.testingbot.service.KeyboardService;
-import com.example.testingbot.service.QuestionService;
-import com.example.testingbot.service.StatService;
-import com.example.testingbot.service.UserService;
+import com.example.testingbot.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
 import java.util.List;
 
 import static com.example.testingbot.constant.Admin.*;
@@ -30,6 +30,7 @@ public class BotController extends TelegramLongPollingBot {
     private final UserService userService;
     private final QuestionService questionService;
     private final StatService statService;
+    private final MessageService messageService;
 
     private final static String REGEX_ID = "^\\d+$";
     private final static String REGEX_PHONE = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
@@ -39,12 +40,14 @@ public class BotController extends TelegramLongPollingBot {
     //private boolean findImage = false;
 
     @Autowired
-    public BotController(KeyboardService keyboardService, UserService userService, QuestionService questionService, StatService statService) {
+    public BotController(KeyboardService keyboardService, UserService userService, QuestionService questionService, StatService statService, MessageService messageService) {
         this.keyboardService = keyboardService;
         this.userService = userService;
         this.questionService = questionService;
         this.statService = statService;
+        this.messageService = messageService;
     }
+
 
 //    @Autowired
 //    private PhotoRepo photoRepo;
@@ -224,11 +227,16 @@ public class BotController extends TelegramLongPollingBot {
                     statService.sendStat(Integer.valueOf(message.getText()));
                 }
 
+                if (message.getText().equals(UserMessage.REPORT.getUserMessage())) {
+                    File file = statService.findAllAnswers();
+                    executeDocument(messageService.getDocument(file, message.getFrom().getId()));
+                }
+
 //                if (message.getText().equals(UserMessage.FIND_DOC.getUserMessage())) {
 //                    findImage = true;
-//                    executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID_DOC.getBotMessage()));
+//                    //executeMessage(keyboardService.sendMsg(message, BotMessage.ENTER_ID_DOC.getBotMessage()));
 //                }
-//
+
 //                if (findImage && message.getText().matches(REGEX_MONTHS)) {
 //                    findImage = false;
 //                    statService.sendImage(Long.valueOf(message.getText()));
@@ -243,7 +251,6 @@ public class BotController extends TelegramLongPollingBot {
 //                    adminSearchStat = false;
 //                    statService.sendStat(Integer.valueOf(message.getText()));
 //                }
-
             }
         }
     }
@@ -251,6 +258,14 @@ public class BotController extends TelegramLongPollingBot {
     private void executeMessage(SendMessage sendMessage) {
         try {
             execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void executeDocument(SendDocument sendDocument) {
+        try {
+            execute(sendDocument);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
