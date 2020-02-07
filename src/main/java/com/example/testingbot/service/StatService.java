@@ -89,7 +89,7 @@ public class StatService {
 
     public void sendImage(Long imageId) {
         ImageEntity image = imageRepository.findById(imageId).get();
-        messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_2.getConstant()), image.getLink(), Admin.BASIC_URL_PHOTO.getConstant());
+        messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()), image.getLink(), Admin.BASIC_URL_PHOTO.getConstant());
     }
 
     public void sendStat(Integer telegramId) {
@@ -110,7 +110,7 @@ public class StatService {
                 dateString = TEST_NO_START.getBotMessage();
             }
 
-            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_2.getConstant()),
+            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()),
                     START_TEST_TIME.getBotMessage() + dateString,
                     Admin.BASIC_URL.getConstant());
 
@@ -123,7 +123,7 @@ public class StatService {
                 dateString = TEST_NO_FINISH.getBotMessage();
             }
 
-            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID_2.getConstant()),
+            messageService.sendMessageToUser(Integer.valueOf(Admin.ADMIN_ID.getConstant()),
                     FINISH_TEST_TIME.getBotMessage() + dateString,
                     Admin.BASIC_URL.getConstant());
 

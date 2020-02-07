@@ -12,8 +12,9 @@ public enum Admin {
     //TOKEN("920411958:AAEjN4VyKGZYkoKZalvdIfhD0PROnFGtwL0"),
     //BOT_NAME("dating_zp_bot"),
 
-    ADMIN_ID("11111111"),
-    //ADMIN_ID("20419906"),
+    //ADMIN_ID("11111111"),
+    ADMIN_ID("20419906"),
+    //ADMIN_ID("370678219"),
     ADMIN_ID_2("654323"),
     //ADMIN_ID_3("370678219"),
     ADMIN_ID_3("11111111"),
